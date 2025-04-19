@@ -106,13 +106,14 @@ export default function MainPage() {
   };
 
   return (
-    <Box maxWidth={700} mx="auto" mt={{ xs: 2, sm: 6 }} p={{ xs: 1, sm: 3 }} boxShadow={3} borderRadius={3} bgcolor="#fff" minHeight="80vh">
-      <Typography variant="h4" mb={2} fontWeight={700} color="primary.main" sx={{ letterSpacing: 1, textAlign: "center" }}>
+    <Box maxWidth={700} mx="auto" mt={{ xs: 2, sm: 6 }} p={{ xs: 1, sm: 3 }} boxShadow={3} borderRadius={3} bgcolor="#fff" minHeight="80vh" sx={{ transition: 'box-shadow 0.3s', boxShadow: { xs: 1, sm: 3 } }}>
+      <Typography variant="h4" mb={2} fontWeight={700} color="primary.main" sx={{ letterSpacing: 1, textAlign: "center", fontFamily: 'Noto Sans TC, sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+        <span className="material-icons" style={{ fontSize: 36, color: '#1976d2', verticalAlign: 'middle' }}>insights</span>
         文萃智析（ContentWise）
       </Typography>
-      <Tabs value={tab} onChange={handleTabChange} sx={{ mb: 2 }} centered variant="fullWidth">
-        <Tab label="貼上文章" />
-        <Tab label="輸入網址" />
+      <Tabs value={tab} onChange={handleTabChange} sx={{ mb: 2, borderRadius: 2, bgcolor: '#f5f7fa', minHeight: 48 }} centered variant="fullWidth">
+        <Tab label={<><span className="material-icons" style={{ verticalAlign: 'middle', marginRight: 4 }}>edit_note</span>貼上文章</>} sx={{ fontWeight: 700, fontSize: 17, minHeight: 48 }} />
+        <Tab label={<><span className="material-icons" style={{ verticalAlign: 'middle', marginRight: 4 }}>link</span>輸入網址</>} sx={{ fontWeight: 700, fontSize: 17, minHeight: 48 }} />
       </Tabs>
       {tab === 0 ? (
         <TextField
@@ -123,7 +124,8 @@ export default function MainPage() {
           value={input}
           onChange={e => setInput(e.target.value)}
           margin="normal"
-          sx={{ bgcolor: "#f7f9fa", borderRadius: 2 }}
+          sx={{ bgcolor: "#f7f9fa", borderRadius: 2, fontSize: 17, letterSpacing: 1 }}
+          placeholder="請將欲分析的文章內容貼於此處..."
         />
       ) : (
         <TextField
@@ -132,29 +134,36 @@ export default function MainPage() {
           value={url}
           onChange={e => setUrl(e.target.value)}
           margin="normal"
-          sx={{ bgcolor: "#f7f9fa", borderRadius: 2 }}
+          sx={{ bgcolor: "#f7f9fa", borderRadius: 2, fontSize: 17, letterSpacing: 1 }}
+          placeholder="https://example.com/article"
         />
       )}
-      {error && <Alert severity="error" sx={{ mb: 1 }}>{error}</Alert>}
-      <Button variant="contained" color="primary" fullWidth sx={{ mt: 1, py: 1.2, fontSize: 18, fontWeight: 700, borderRadius: 2 }} onClick={handleAnalyze} disabled={loading}>
+      {error && <Alert severity="error" sx={{ mb: 1, fontSize: 16, alignItems: 'center' }}><span className="material-icons" style={{ fontSize: 20, verticalAlign: 'middle', marginRight: 4 }}>error_outline</span>{error}</Alert>}
+      <Button variant="contained" color="primary" fullWidth sx={{ mt: 1, py: 1.2, fontSize: 18, fontWeight: 700, borderRadius: 2, boxShadow: 2, letterSpacing: 1, transition: 'background 0.2s' }} onClick={handleAnalyze} disabled={loading} startIcon={<span className="material-icons">analytics</span>}>
         {loading ? <CircularProgress size={24} /> : "分析"}
       </Button>
+      <Box mt={2} mb={1} display={{ xs: 'block', sm: 'none' }}>
+        <Alert severity="info" sx={{ fontSize: 15, alignItems: 'center' }}>
+          <span className="material-icons" style={{ fontSize: 20, verticalAlign: 'middle', marginRight: 4 }}>touch_app</span>
+          支援手機操作，請於上方選擇輸入方式。
+        </Alert>
+      </Box>
       {(summary || comment) && (
         <Box mt={4}>
-          <Paper elevation={2} sx={{ p: { xs: 2, sm: 3 }, mb: 3, bgcolor: "#f0f4fa", borderRadius: 3 }}>
+          <Paper elevation={2} sx={{ p: { xs: 2, sm: 3 }, mb: 3, bgcolor: "#f0f4fa", borderRadius: 3, boxShadow: { xs: 1, sm: 2 } }}>
             <Box display="flex" alignItems="center" mb={1}>
               <span className="material-icons" style={{ color: "#1976d2", marginRight: 8, fontSize: 28 }}>summarize</span>
               <Typography variant="h6" fontWeight={700} color="primary" sx={{ letterSpacing: 1 }}>總結重點</Typography>
             </Box>
-            <Typography variant="body1" sx={{ fontSize: { xs: 17, sm: 18 }, lineHeight: 1.8, color: "#222", mb: comment ? 2 : 0 }}>{summary}</Typography>
+            <Typography variant="body1" sx={{ fontSize: { xs: 17, sm: 18 }, lineHeight: 1.8, color: "#222", mb: comment ? 2 : 0, whiteSpace: 'pre-line' }}>{summary}</Typography>
           </Paper>
           {comment && (
-            <Paper elevation={2} sx={{ p: { xs: 2, sm: 3 }, bgcolor: "#fffbe7", borderRadius: 3 }}>
+            <Paper elevation={2} sx={{ p: { xs: 2, sm: 3 }, bgcolor: "#fffbe7", borderRadius: 3, boxShadow: { xs: 1, sm: 2 } }}>
               <Box display="flex" alignItems="center" mb={1}>
                 <span className="material-icons" style={{ color: "#f9a825", marginRight: 8, fontSize: 28 }}>emoji_objects</span>
                 <Typography variant="h6" fontWeight={700} color="warning.main" sx={{ letterSpacing: 1 }}>感想生成</Typography>
               </Box>
-              <Typography variant="body1" sx={{ fontSize: { xs: 17, sm: 18 }, lineHeight: 1.8, color: "#444" }}>{comment}</Typography>
+              <Typography variant="body1" sx={{ fontSize: { xs: 17, sm: 18 }, lineHeight: 1.8, color: "#444", whiteSpace: 'pre-line' }}>{comment}</Typography>
             </Paper>
           )}
         </Box>
