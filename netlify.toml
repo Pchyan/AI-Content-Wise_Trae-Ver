@@ -1,0 +1,10 @@
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+[dev]
+  command = "vite"
+  port = 5173
+
+[build.environment]
+  NODE_VERSION = "18"
